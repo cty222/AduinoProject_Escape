@@ -11,8 +11,8 @@
 #define Locker0 14
 #define Locker1 15
 #define LedDataOut 16
-#define LedClock 17
-#define LedLatch 18
+#define LedLatch 17
+#define LedClock 18
 #define LedReset 19
 
 #define SS_PIN 10
@@ -50,53 +50,46 @@ void setup()
   pinMode(CS5_PIN,OUTPUT); 
   digitalWrite(CS5_PIN, HIGH);
 
+  Led_Init();
 }
 
 uchar serNum[5];
 
 void loop()
 {
+  boolean ledFalsg = false;
   while(1)
   {
     MFRC522_Init(CS0_PIN);
-    searchCard(CS0_PIN);
+    ledFalsg=searchCard(CS0_PIN);
+    Led_display(CS0_PIN,ledFalsg);
     
     MFRC522_Init(CS1_PIN);
-    searchCard(CS1_PIN);
+    ledFalsg=searchCard(CS1_PIN);
+    Led_display(CS1_PIN,ledFalsg);
     
     MFRC522_Init(CS2_PIN);
-    searchCard(CS2_PIN);
+    ledFalsg=searchCard(CS2_PIN);
+    Led_display(CS2_PIN,ledFalsg);
     
     MFRC522_Init(CS3_PIN);
-    searchCard(CS3_PIN);
+    ledFalsg=searchCard(CS3_PIN);
+    Led_display(CS3_PIN,ledFalsg);
     
     MFRC522_Init(CS4_PIN);
-    searchCard(CS4_PIN);
+    ledFalsg=searchCard(CS4_PIN);
+    Led_display(CS4_PIN,ledFalsg);
 
     MFRC522_Init(CS5_PIN);
-    searchCard(CS5_PIN);
+    ledFalsg=searchCard(CS5_PIN);
+    Led_display(CS5_PIN,ledFalsg);
+    
+    checkAns();
     delay(50);
-    
-    while(1)
-    {
-      delay(3000);
-      Serial.println("LOW ");
-      pinMode(Locker0,OUTPUT); 
-      digitalWrite(Locker0, LOW);  
-      pinMode(Locker1,OUTPUT); 
-      digitalWrite(Locker1, LOW);
-      delay(3000);
-      Serial.println("HIGH ");
-      pinMode(Locker0,OUTPUT); 
-      digitalWrite(Locker0, HIGH);  
-      pinMode(Locker1,OUTPUT); 
-      digitalWrite(Locker1, HIGH);
-    }
-    
   }
 }
 
-void searchCard(uchar csPin)
+boolean searchCard(uchar csPin)
 {
   uchar status;
   uchar str[16];
@@ -113,51 +106,22 @@ void searchCard(uchar csPin)
     Serial.println(" ");
 #endif
   }
-  
+
   status = MFRC522_Anticoll(str,csPin);
   memcpy(serNum, str, 5);
   if (status == MI_OK)
   {
-#if 1
-    Serial.println("The card's number is : ");
-    Serial.print(serNum[0],HEX);
-    Serial.print(" , ");
-    Serial.print(serNum[1],HEX);
-    Serial.print(" , ");
-    Serial.print(serNum[2],HEX);
-    Serial.print(" , ");
-    Serial.print(serNum[3],HEX);
-    Serial.print(" , ");
-    Serial.print(serNum[4],HEX);
-    Serial.println(" ");
+#if 0
+    showCardNum(serNum);
 #else
-    if(!strncmp((char *)serNum,(char *)CardNumA0,5))
-    {
-      Serial.println("A0");
-    }
-    if(!strncmp((char *)serNum,(char *)CardNumA1,5))
-    {
-      Serial.println("A1");
-    }
-    else if(!strncmp((char *)serNum,(char *)CardNumA2,5))
-    {
-      Serial.println("A2");
-    }
-    else if(!strncmp((char *)serNum,(char *)CardNumA3,5))
-    {
-      Serial.println("A3");
-    }
-    else if(!strncmp((char *)serNum,(char *)CardNumA4,5))
-    {
-      Serial.println("A4");
-    }
-    else if(!strncmp((char *)serNum,(char *)CardNumA5,5))
-    {
-      Serial.println("A5");
-    }
+    checkID(csPin);
 #endif
+    return true;
   }
- 
+  else
+  {
+     return false;
+  }
 }
 
 uchar MFRC522_Anticoll(uchar *serNum, uchar csPin)
@@ -187,4 +151,6 @@ status = MI_ERR;
 //SetBitMask(CollReg, 0x80); //ValuesAfterColl=1
 return status;
 }
+
+
 
