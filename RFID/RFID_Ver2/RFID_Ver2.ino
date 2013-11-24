@@ -27,7 +27,7 @@ void setup()
   digitalWrite(Locker0, HIGH);
   
   pinMode(Locker1,OUTPUT); 
-  digitalWrite(Locker1, HIGH);
+  digitalWrite(Locker1, LOW);
      
   pinMode(SS_PIN,OUTPUT); 
   digitalWrite(SS_PIN, HIGH);
@@ -54,32 +54,48 @@ void setup()
 }
 
 uchar serNum[5];
+static boolean locker0Flag[6] = {false,false,false,false,false,false};
+static boolean locker1Flag[6] = {false,false,false,false,false,false};
 
 void loop()
 {
   boolean ledFalsg = false;
   while(1)
   {
+    memset(serNum,'\0',sizeof(serNum));
+    
+    locker0Flag[0]=false;
+    locker1Flag[0]=false;
     MFRC522_Init(CS0_PIN);
     ledFalsg=searchCard(CS0_PIN);
     Led_display(CS0_PIN,ledFalsg);
     
+    locker0Flag[1]=false;
+    locker1Flag[1]=false;
     MFRC522_Init(CS1_PIN);
     ledFalsg=searchCard(CS1_PIN);
     Led_display(CS1_PIN,ledFalsg);
     
+    locker0Flag[2]=false;
+    locker1Flag[2]=false;
     MFRC522_Init(CS2_PIN);
     ledFalsg=searchCard(CS2_PIN);
     Led_display(CS2_PIN,ledFalsg);
     
+    locker0Flag[3]=false;
+    locker1Flag[3]=false;
     MFRC522_Init(CS3_PIN);
     ledFalsg=searchCard(CS3_PIN);
     Led_display(CS3_PIN,ledFalsg);
     
+    locker0Flag[4]=false;
+    locker1Flag[4]=false;
     MFRC522_Init(CS4_PIN);
     ledFalsg=searchCard(CS4_PIN);
     Led_display(CS4_PIN,ledFalsg);
 
+    locker0Flag[5]=false;
+    locker1Flag[5]=false;
     MFRC522_Init(CS5_PIN);
     ledFalsg=searchCard(CS5_PIN);
     Led_display(CS5_PIN,ledFalsg);
@@ -96,14 +112,10 @@ boolean searchCard(uchar csPin)
   status = MFRC522_Request(PICC_REQIDL, str,csPin);
   if (status == MI_OK)
   {
+#if 0
     Serial.print(csPin);
     Serial.print(" Pin, ");
     Serial.println("Find out a card ");
-#if 0
-    Serial.print(str[0],BIN);
-    Serial.print(" , ");
-    Serial.print(str[1],BIN);
-    Serial.println(" ");
 #endif
   }
 
@@ -112,8 +124,10 @@ boolean searchCard(uchar csPin)
   if (status == MI_OK)
   {
 #if 0
+    //顯示卡號
     showCardNum(serNum);
 #else
+    //檢查邏輯
     checkID(csPin);
 #endif
     return true;
