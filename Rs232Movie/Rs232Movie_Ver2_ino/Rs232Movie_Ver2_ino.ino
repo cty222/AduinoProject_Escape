@@ -2,9 +2,6 @@
 #include "reg.h"
 #include "cardNums.h"
 
-#define CS3_PIN 6
-#define CS2_PIN 7
-#define CS1_PIN 8
 #define CS0_PIN 9
 
 #define SS_PIN 10
@@ -46,8 +43,8 @@ void loop()
 }
 
 uchar cmdArray[] = {0x10,0x11,0x12,0x13,0x14,0x15,
-                    0x16,0x17,0x18,0x19,0x1a,0x1b,
-                    0x1c,};
+                    0x16,0x17,0x18,0x19,0x1d,0x1b,
+                    0x1c};
 
 uchar searchCard(uchar csPin)
 {
@@ -83,7 +80,7 @@ uchar searchCard(uchar csPin)
     }
     for(i=0;i<sizeof(CardNumA3)/5;i++)
     {
-      if(!strncmp((char *)serNum,(char *)&CardNumA4[i][0],5))
+      if(!strncmp((char *)serNum,(char *)&CardNumA3[i][0],5))
       {
           cmd = cmdArray[3];
       }

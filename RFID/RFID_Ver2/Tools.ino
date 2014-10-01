@@ -35,16 +35,16 @@ void checkAns()
     ans1 &=  locker1Flag[i];
   }
   Serial.println();
-  digitalWrite(Locker0, LOW); 
+  digitalWrite(Locker0, HIGH); 
   if(ans0)
   {
-    digitalWrite(Locker0, HIGH); 
+    digitalWrite(Locker0, LOW); 
     delay(3000);
   }
-  digitalWrite(Locker1, LOW); 
+  digitalWrite(Locker1, HIGH); 
   if(ans1)
   {
-    digitalWrite(Locker1, HIGH);
+    digitalWrite(Locker1, LOW);
     delay(3000);
   }
 }
@@ -133,6 +133,7 @@ uchar CardNumA10[][5] = {
   0x9C , 0xC , 0xCC , 0x35 , 0x69,
   0x8C , 0xAE , 0x7D , 0x35 , 0x6A,
 };
+
 uchar CardNumA11[][5] = {
   0xC5 , 0x5D , 0xC3 , 0xDC , 0x87,
   0x8C , 0x83 , 0x2F , 0x35 , 0x15,
@@ -148,8 +149,6 @@ uchar CardNumA12[][5] = {
   0x8C , 0x71 , 0xC7 , 0x35 , 0xF,
 };
 
-
-
 void checkID(uchar csPin)
 {
   int i=0;
@@ -162,23 +161,27 @@ void checkID(uchar csPin)
             {
               locker0Flag[0]=true;
             }
-            if(!strncmp((char *)serNum,(char *)&CardNumA5[i][0],5))
+      }
+      for(i=0;i<sizeof(CardNumA6)/5;i++)
+      {
+            if(!strncmp((char *)serNum,(char *)&CardNumA6[i][0],5))
             {
               locker1Flag[0]=true;
             }
       }
       break;
     case CS1_PIN:
-      for(i=0;i<sizeof(CardNumA1)/5;i++)
+       for(i=0;i<sizeof(CardNumA1)/5;i++)
       {
             if(!strncmp((char *)serNum,(char *)&CardNumA1[i][0],5))
             {
-             // Serial.println("1.1");
               locker0Flag[1]=true;
             }
-            if(!strncmp((char *)serNum,(char *)&CardNumA6[i][0],5))
+      }
+      for(i=0;i<sizeof(CardNumA7)/5;i++)
+      {
+            if(!strncmp((char *)serNum,(char *)&CardNumA7[i][0],5))
             {
-              //Serial.println("1.6");
               locker1Flag[1]=true;
             }
       }
@@ -188,12 +191,13 @@ void checkID(uchar csPin)
       {
             if(!strncmp((char *)serNum,(char *)&CardNumA2[i][0],5))
             {
-              //Serial.println("2.2");
               locker0Flag[2]=true;
             }
-            if(!strncmp((char *)serNum,(char *)&CardNumA7[i][0],5))
+      }
+      for(i=0;i<sizeof(CardNumA8)/5;i++)
+      {
+            if(!strncmp((char *)serNum,(char *)&CardNumA8[i][0],5))
             {
-              //Serial.println("2.7");
               locker1Flag[2]=true;
             }
       }
@@ -203,42 +207,45 @@ void checkID(uchar csPin)
       {
             if(!strncmp((char *)serNum,(char *)&CardNumA3[i][0],5))
             {
-              //Serial.println("3.3");
               locker0Flag[3]=true;
             }
-            if(!strncmp((char *)serNum,(char *)&CardNumA8[i][0],5))
+      }
+      for(i=0;i<sizeof(CardNumA9)/5;i++)
+      {
+            if(!strncmp((char *)serNum,(char *)&CardNumA9[i][0],5))
             {
-              //Serial.println("3.8");
               locker1Flag[3]=true;
             }
       }
       break;
-    case CS4_PIN:
-      for(i=0;i<sizeof(CardNumA4)/5;i++)
+      case CS4_PIN:
+       for(i=0;i<sizeof(CardNumA4)/5;i++)
       {
             if(!strncmp((char *)serNum,(char *)&CardNumA4[i][0],5))
             {
-              //Serial.println("4.4");
               locker0Flag[4]=true;
             }
-            if(!strncmp((char *)serNum,(char *)&CardNumA9[i][0],5))
+      }
+      for(i=0;i<sizeof(CardNumA10)/5;i++)
+      {
+            if(!strncmp((char *)serNum,(char *)&CardNumA10[i][0],5))
             {
-              //Serial.println("4.9");
               locker1Flag[4]=true;
             }
       }
       break;
-    case CS5_PIN:
+      case CS5_PIN:
       for(i=0;i<sizeof(CardNumA5)/5;i++)
       {
-             if(!strncmp((char *)serNum,(char *)&CardNumA5[i][0],5))
+            if(!strncmp((char *)serNum,(char *)&CardNumA5[i][0],5))
             {
-              //Serial.println("5.5");
               locker0Flag[5]=true;
             }
-            if(!strncmp((char *)serNum,(char *)&CardNumA10[i][0],5))
+      }
+      for(i=0;i<sizeof(CardNumA11)/5;i++)
+      {
+            if(!strncmp((char *)serNum,(char *)&CardNumA11[i][0],5))
             {
-              //Serial.println("5.10");
               locker1Flag[5]=true;
             }
       }

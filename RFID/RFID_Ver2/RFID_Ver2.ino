@@ -8,6 +8,13 @@
 #define CS1_PIN 8
 #define CS0_PIN 9
 
+#define LED0_PIN 2
+#define LED1_PIN 3
+#define LED2_PIN 16
+#define LED3_PIN 17
+#define LED4_PIN 18
+#define LED5_PIN 19
+
 #define Locker0 14
 #define Locker1 15
 #define LedDataOut 16
@@ -27,7 +34,7 @@ void setup()
   digitalWrite(Locker0, HIGH);
   
   pinMode(Locker1,OUTPUT); 
-  digitalWrite(Locker1, LOW);
+  digitalWrite(Locker1, HIGH);
      
   pinMode(SS_PIN,OUTPUT); 
   digitalWrite(SS_PIN, HIGH);

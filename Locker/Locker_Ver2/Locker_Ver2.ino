@@ -37,10 +37,12 @@ void setup()
 
 }
 
-static unsigned char selectNum[] = {0,0,0,0};
-static unsigned char AnsNum[] = {1,2,3,4};
+static unsigned char selectNum[] = {0,0,0,0,0,0,0,0};
+static unsigned char AnsNum[] = {3,1,2,3,4,1,2,3};
 static unsigned char count = 1;
 boolean unlockFlag = false;
+
+static unsigned char lastNum = 0;
 
 void loop()
 {
@@ -57,7 +59,7 @@ void loop()
       btnLEDCheck(btn1,btnLED1);
       btnLEDCheck(btn2,btnLED2);
       btnLEDCheck(btn3,btnLED3);
-      if(count >4)
+      if(count >sizeof(AnsNum))
       {
         unlockFlag=checkAns();
         checkUnlock(unlockFlag);
@@ -68,21 +70,22 @@ void loop()
 }
 
 void btnLEDCheck(unsigned int btnNum,unsigned int btnLedNum)
-{
-  
-   if(selectNum[btnLedNum-btnLED0]!=0)
-   {
-     return;
-   }
-  
+{ 
     digitalWrite(btnNum,HIGH);
     if(digitalRead(btnNum)==LOW)
     {
-      Serial.println(btnNum);
+      Serial.print("btn: ");
+      Serial.println(18-btnNum);
       digitalWrite(btnLedNum,HIGH);
-      selectNum[btnLedNum-btnLED0] = count;
+      while(digitalRead(btnNum)==LOW)
+      {
+        delay(50);
+      }
+      selectNum[count-1] = 18 - btnNum;
       count++;
+      digitalWrite(btnLedNum,LOW);
     }
+    
 }
 
 boolean checkReset()
@@ -98,7 +101,7 @@ boolean checkReset()
 boolean checkAns()
 {
   int i =0;
-  for(i=0;i<4;i++)
+  for(i=0;i<sizeof(AnsNum);i++)
   {
     Serial.print(selectNum[i]);
     Serial.print("  ");
@@ -148,7 +151,7 @@ void reset()
   digitalWrite(btnLED1,LOW);
   digitalWrite(btnLED2,LOW);
   digitalWrite(btnLED3,LOW);
-  digitalWrite(LED_Red,HIGH);
+  digitalWrite(LED_Red,LOW);
   digitalWrite(LED_Green,LOW);
   
   count = 1;

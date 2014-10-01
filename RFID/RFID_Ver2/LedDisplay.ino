@@ -1,4 +1,4 @@
-static uchar ledMaping[]= {2,3,16,17,18,19};
+static uchar ledMaping[]= {LED0_PIN, LED1_PIN, LED2_PIN, LED3_PIN, LED4_PIN, LED5_PIN};
 
 void Led_display(uchar LedNum,boolean flag)
 {
